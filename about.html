@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Portfolio</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+</head>
+
+<body class="bg-slate-950 text-white font-sans relative overflow-x-hidden">
+
+<!-- TERMINAL BACKGROUND -->
+<div id="terminal-bg"></div>
+
+<div class="min-h-screen flex items-center justify-center px-4 relative z-10">
+  <div class="max-w-4xl w-full bg-white/5 backdrop-blur-xl rounded-2xl p-8 shadow-lg border border-green-400/20">
+
+    <!-- PROFILE -->
+    <div class="flex flex-col md:flex-row items-center gap-6">
+
+      <img src="image.png" alt="foto" 
+           class="w-32 h-32 rounded-full object-cover border-4 border-green-400 shadow-lg">
+
+      <div>
+        <h1 class="text-3xl font-bold text-green-400 font-mono">Dimas Aldi Saputra</h1>
+        <p class="text-slate-300 mt-2">
+          Mahasiswa Informatika | Web Developer & Mobile Developer
+        </p>
+      </div>
+
+    </div>
+
+    <!-- DESKRIPSI -->
+    <div class="mt-6 text-slate-300 leading-relaxed">
+      <p>
+        Halo, saya Dimas Aldi Saputra, mahasiswa Politeknik Negeri Jember dengan ketertarikan besar di bidang pengembangan web. Saya berpengalaman menggunakan berbagai teknologi modern untuk merancang dan membangun aplikasi yang responsif, efisien, serta berfokus pada pengalaman pengguna.
+      </p>
+    </div>
+
+    <!-- TEKNOLOGI -->
+    <div class="mt-8">
+      <h2 class="text-green-400 font-semibold mb-4 text-lg font-mono">$ tech_stack</h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+        <div class="tech"><i class="devicon-html5-plain colored"></i><span>HTML</span></div>
+        <div class="tech"><i class="devicon-css3-plain colored"></i><span>CSS</span></div>
+        <div class="tech"><i class="devicon-javascript-plain colored"></i><span>JavaScript</span></div>
+        <div class="tech"><i class="devicon-tailwindcss-plain colored"></i><span>Tailwind</span></div>
+        <div class="tech"><i class="devicon-laravel-plain colored"></i><span>Laravel</span></div>
+        <div class="tech"><i class="devicon-mysql-plain colored"></i><span>MySQL</span></div>
+
+      </div>
+    </div>
+
+    <!-- CV -->
+    <div class="mt-10 flex gap-4 flex-wrap">
+
+      <a href="CV_DIMAS ALDI ALDI.pdf"
+         class="px-4 py-2 bg-green-500 text-black rounded-lg hover:bg-green-400 transition shadow">
+        Download CV
+      </a>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- DOCK NAVIGATION -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg z-40">
+
+  <!-- HOME -->
+  <div onclick="navigateTo('index.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="home" class="text-blue-400"></i>
+    <span class="tooltip-hover">Home</span>
+  </div>
+
+  <!-- PROFIL -->
+  <div onclick="navigateTo('project.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="code" class="text-green-400"></i>
+    <span class="tooltip-hover">Project</span>
+  </div>
+
+  <!-- PROJECT -->
+  <div onclick="navigateTo('sertifikat.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="award" class="text-yellow-400"></i>
+    <span class="tooltip-hover">Sertificate</span>
+  </div>
+
+  <!-- SERTIFIKAT -->
+  <div onclick="navigateTo('contact.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="mail" class="text-red-400"></i>
+    <span class="tooltip-hover">Mail</span>
+  </div>
+
+</div>
+
+<script>
+lucide.createIcons();
+
+function navigateTo(page) {
+  window.location.href = page;
+}
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>

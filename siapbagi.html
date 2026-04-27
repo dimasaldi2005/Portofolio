@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #050505;
+      color: white;
+      overflow-x: hidden;
+      top: 0px !important;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4), 0 0 30px rgba(255, 255, 255, 0.2);
+    }
+
+    .glow-text-intense {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .glow-border {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .hover-float {
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    }
+
+    .hover-float:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 15px 30px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.1) inset;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .goog-te-banner-frame.skiptranslate {
+      display: none !important;
+    }
+
+    .skiptranslate {
+      display: none !important;
+    }
+
+    #google_translate_element {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    #app-content {
+      transition: filter 0.6s ease, opacity 0.6s ease;
+    }
+
+    .blur-effect {
+      filter: blur(8px);
+      opacity: 0.7;
+    }
+
+    @keyframes pulse-cursor {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .cursor-blink {
+      animation: pulse-cursor 1s step-end infinite;
+    }
+
+    #splash-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(17, 24, 39, 0.4) 0%, #050505 100%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+  </style>
+</head>
+
+<body class="selection:bg-gray-800 font-sans text-white">
+  <div id="google_translate_element"></div>
+  <div id="splash-screen">
+    <div class="flex gap-4 mb-8 z-10">
+      <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center bg-black glow-border">
+        <i data-lucide="code" class="text-gray-200 w-5 h-5"></i>
+      </div>
+      <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center bg-black glow-border">
+        <i data-lucide="user" class="text-gray-200 w-5 h-5"></i>
+      </div>
+      <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center bg-black glow-border">
+        <i data-lucide="globe" class="text-gray-200 w-5 h-5"></i>
+      </div>
+    </div>
+    <h1 class="text-4xl md:text-5xl font-bold mb-2 tracking-tight z-10 glow-text">Welcome To My</h1>
+    <h2
+      class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 mb-10 z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] text-center">
+      Portfolio Website</h2>
+    <div
+      class="px-6 py-2 rounded-full border border-gray-700 bg-black/50 backdrop-blur-md flex items-center gap-2 text-sm text-gray-300 z-10 glow-border">
+      <i data-lucide="globe" class="w-4 h-4"></i>
+      <span><span id="splash-link"></span><span class="cursor-blink">|</span></span>
+    </div>
+  </div>
+
+  <div id="app-content" class="hidden min-h-screen">
+    <nav
+      class="w-full px-6 py-4 flex justify-between items-center border-b border-gray-900 bg-[#050505]/80 backdrop-blur-xl sticky top-0 z-50">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gray-900 overflow-hidden border border-gray-700 glow-border">
+          <img src="https://placehold.co/100x100/111/FFF?text=A" alt="Logo" class="w-full h-full object-cover" />
+        </div>
+        <span class="text-xl font-bold tracking-tight glow-text">Dimas Aldi Saputra</span>
+      </div>
+      <div class="relative">
+        <div id="lang-toggle"
+          class="px-4 py-2 rounded-lg border border-gray-800 bg-black/50 flex items-center gap-2 text-sm cursor-pointer hover:bg-gray-900 transition glow-border">
+          <span id="current-lang">Indonesia</span>
+          <i data-lucide="chevron-down" class="w-4 h-4"></i>
+        </div>
+        <div id="lang-dropdown"
+          class="absolute right-0 mt-2 w-32 bg-[#0a0a0a] border border-gray-800 rounded-lg shadow-2xl overflow-hidden z-50 hidden">
+          <button onclick="changeLanguage('id', 'Indonesia')"
+            class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">Indonesia</button>
+          <button onclick="changeLanguage('en', 'English')"
+            class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">English</button>
+          <button onclick="changeLanguage('ja', '日本語')"
+            class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">日本語</button>
+          <button onclick="changeLanguage('ko', '한국어')"
+            class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">한국어</button>
+          <button onclick="changeLanguage('ar', 'العربية')"
+            class="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition">العربية</button>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12 md:py-20">
+      <section class="flex flex-col md:flex-row items-center justify-between mb-32 min-h-[60vh]">
+        <div class="w-full md:w-1/2 z-10">
+          <p class="text-gray-400 text-lg mb-2 font-medium tracking-wide">Halo, Saya</p>
+          <h1
+            class="text-6xl md:text-8xl font-black mb-6 tracking-tighter flex items-center glow-text-intense min-h-[80px] md:min-h-[100px]">
+            <span id="typed-text"></span>
+            <span class="w-1 h-14 md:h-20 bg-white ml-2 cursor-blink shadow-[0_0_15px_#fff]"></span>
+          </h1>
+          <p class="text-gray-400 text-lg md:text-xl leading-relaxed mb-8 max-w-md">
+            Merancang arsitektur digital dengan presisi. Spesialisasi dalam ekosistem korporat, AI, dan otomatisasi
+            sistem berskala tinggi.
+          </p>
+          <div class="flex gap-4">
+            <button
+              class="hover-float px-8 py-3 bg-gradient-to-r from-gray-200 to-white text-black font-bold rounded-xl flex items-center gap-2">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+              WhatsApp
+            </button>
+            <button
+              class="hover-float px-8 py-3 bg-[#111] border border-gray-700 text-white font-semibold rounded-xl flex items-center gap-2">
+              <i data-lucide="video" class="w-5 h-5"></i>
+              Tiktok
+            </button>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 mt-16 md:mt-0 relative h-[400px] md:h-[500px] flex items-center justify-center">
+          <div id="canvas-container" class="w-full h-full absolute z-0 cursor-grab active:cursor-grabbing"></div>
+        </div>
+      </section>
+
+      <section class="mb-32">
+        <div
+          class="w-full bg-[#0a0a0a] border border-gray-800/80 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden glow-border">
+          <div class="absolute inset-0 bg-gradient-to-b from-gray-800/10 to-transparent"></div>
+          <div class="text-7xl text-gray-800 absolute -top-2 left-6 opacity-40 font-serif leading-none">"</div>
+          <p class="text-xl md:text-3xl font-medium italic text-gray-200 mb-6 z-10 relative glow-text">
+            "Di mana bumi dipijak, di situ langit dijunjung."
+          </p>
+          <p class="text-gray-500 text-sm font-bold tracking-[0.2em] z-10 relative">- ANONIM ( PEPATAH )</p>
+        </div>
+      </section>
+
+      <section class="mb-32">
+        <h2 class="text-3xl font-bold mb-12 flex items-center gap-4 glow-text">
+          Tentang Saya
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div class="flex flex-col md:flex-row gap-12">
+          <div class="w-full md:w-1/2">
+            <h3 class="text-2xl font-bold mb-6">Halo, Saya <span class="text-gray-300 glow-text">Dimas</span></h3>
+            <p class="text-gray-400 leading-relaxed mb-4 text-lg">
+              Saya adalah seorang developer muda dari Indonesia dengan <span class="text-white font-bold glow-text">3+
+                tahun pengalaman</span> membangun sistem digital — mulai dari bot otomasi, web app, hingga arsitektur
+              berbasis AI.
+            </p>
+            <p class="text-gray-400 leading-relaxed mb-8 text-lg">
+              Saya menyukai coding karena saya percaya bahwa di masa depan, <span
+                class="text-white font-bold glow-text">hampir semua hal bisa dibangun dan digantikan oleh
+                teknologi</span>. Coding memberi saya kemampuan untuk menciptakan, mengontrol, dan mengembangkan sesuatu
+              dari nol.
+            </p>
+            <div class="flex gap-4">
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-2xl p-5 flex-1 text-center glow-border hover-float">
+                <h4 class="text-4xl font-black mb-1 glow-text">3+</h4>
+                <p class="text-xs text-gray-500 font-bold tracking-wider">TAHUN<br />CODING</p>
+              </div>
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-2xl p-5 flex-1 text-center glow-border hover-float">
+                <h4 class="text-4xl font-black mb-1 glow-text">10+</h4>
+                <p class="text-xs text-gray-500 font-bold tracking-wider">PROYEK<br />SELESAI</p>
+              </div>
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-2xl p-5 flex-1 text-center glow-border hover-float">
+                <h4 class="text-4xl font-black mb-1 glow-text">8+</h4>
+                <p class="text-xs text-gray-500 font-bold tracking-wider">TEKNOLOGI</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2 flex items-center">
+            <div class="w-full bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 relative glow-border">
+              <div
+                class="w-1.5 h-full bg-gradient-to-b from-gray-400 to-gray-800 absolute left-0 top-0 rounded-l-3xl shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+              </div>
+              <p class="text-lg italic text-gray-300 leading-relaxed mb-6 font-medium">
+                "Coding memberi saya kemampuan untuk menciptakan, mengontrol, dan mengembangkan sesuatu dari nol. Bagi
+                saya, coding bukan sekadar skill — tapi alat untuk membentuk masa depan."
+              </p>
+              <p class="text-gray-500 text-sm font-bold tracking-widest">— Dimas</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-32">
+        <h2 class="text-3xl font-bold mb-12 flex items-center gap-4 glow-text">
+          Profil & Keahlian
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div class="flex flex-col md:flex-row gap-6">
+          <div
+            class="w-full md:w-1/3 bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 relative overflow-hidden glow-border hover-float cursor-default">
+            <div
+              class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-gray-200 to-gray-700 shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+            </div>
+            <div class="flex flex-col items-center text-center mt-6 mb-10">
+              <div
+                class="w-36 h-36 rounded-full overflow-hidden border-4 border-gray-700 mb-6 bg-gray-900 shadow-[0_0_30px_rgba(255,255,255,0.1)] transition-transform duration-500 hover:scale-110">
+                <img src="https://placehold.co/300x300/111/FFF?text=A" alt="Accang"
+                  class="w-full h-full object-cover mix-blend-luminosity opacity-90 hover:mix-blend-normal transition duration-500" />
+              </div>
+              <h3 class="text-3xl font-bold mb-3 glow-text">Dimas Aldi</h3>
+              <span
+                class="px-5 py-1.5 bg-gray-800/80 border border-gray-600 rounded-full text-xs font-bold text-gray-200 tracking-wide">
+                Web and Mobile Development
+              </span>
+            </div>
+            <div class="space-y-5 text-sm">
+              <div class="flex justify-between border-b border-gray-800/50 pb-3">
+                <span class="text-gray-500 font-medium">Umur</span>
+                <span class="text-gray-200 font-bold">20 Tahun</span>
+              </div>
+              <div class="flex justify-between border-b border-gray-800/50 pb-3">
+                <span class="text-gray-500 font-medium">Pendidikan</span>
+                <span class="text-gray-200 font-bold">SMK / Setara</span>
+              </div>
+              <div class="flex justify-between border-b border-gray-800/50 pb-3">
+                <span class="text-gray-500 font-medium">Lokasi</span>
+                <span class="text-gray-200 font-bold">Indonesia</span>
+              </div>
+              <div class="flex justify-between border-b border-gray-800/50 pb-3">
+                <span class="text-gray-500 font-medium">Pengalaman</span>
+                <span class="text-gray-200 font-bold">3+ Tahun</span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="w-full md:w-2/3 bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 grid grid-cols-1 md:grid-cols-2 gap-5 glow-border"
+            id="skills-grid">
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-32 relative">
+        <h2 class="text-3xl font-bold mb-20 flex items-center gap-4 glow-text">
+          Perjalanan Saya
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div
+          class="absolute left-[20px] md:left-1/2 top-28 bottom-0 w-0.5 bg-gradient-to-b from-gray-600 via-gray-800 to-transparent transform md:-translate-x-1/2">
+        </div>
+        <div class="space-y-16">
+          <div class="flex flex-col md:flex-row items-center justify-between relative group">
+            <div class="w-full md:w-5/12 ml-12 md:ml-0 md:text-right pr-0 md:pr-12">
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 glow-border transition-all duration-300 group-hover:-translate-y-2 group-hover:border-gray-500 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <p class="text-xs text-gray-500 font-bold tracking-[0.2em] mb-3">2022 — AWAL MULA</p>
+                <h4 class="text-2xl font-bold mb-4 text-gray-200">Mulai Belajar Coding</h4>
+                <p class="text-gray-400 text-sm leading-relaxed font-medium">
+                  Pertama kali belajar Python secara otodidak. Tertarik karena melihat potensi otomasi dan AI.
+                </p>
+              </div>
+            </div>
+            <div
+              class="absolute left-[14px] md:left-1/2 w-3 h-3 bg-gray-400 rounded-full border-4 border-[#050505] box-content transform md:-translate-x-1/2 shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all duration-300 group-hover:bg-white group-hover:scale-125">
+            </div>
+            <div class="hidden md:block w-5/12"></div>
+          </div>
+          <div class="flex flex-col md:flex-row items-center justify-between relative group">
+            <div class="hidden md:block w-5/12"></div>
+            <div
+              class="absolute left-[14px] md:left-1/2 w-3 h-3 bg-gray-400 rounded-full border-4 border-[#050505] box-content transform md:-translate-x-1/2 shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all duration-300 group-hover:bg-white group-hover:scale-125">
+            </div>
+            <div class="w-full md:w-5/12 ml-12 md:ml-0 pl-0 md:pl-12">
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 glow-border transition-all duration-300 group-hover:-translate-y-2 group-hover:border-gray-500 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                <p class="text-xs text-gray-500 font-bold tracking-[0.2em] mb-3">2023 — BERKEMBANG</p>
+                <h4 class="text-2xl font-bold mb-4 text-gray-200">Membangun Bot Pertama</h4>
+                <p class="text-gray-400 text-sm leading-relaxed font-medium">
+                  Berhasil membuat Telegram Userbot dan WhatsApp Bot pertama. Mulai mendalami JavaScript.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col md:flex-row items-center justify-between relative group">
+            <div class="w-full md:w-5/12 ml-12 md:ml-0 md:text-right pr-0 md:pr-12">
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 glow-border transition-all duration-300 relative overflow-hidden group-hover:-translate-y-2 group-hover:border-white/40 group-hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-50"></div>
+                <p class="text-xs text-gray-400 font-bold tracking-[0.2em] mb-3 relative z-10">2024 — EKSPANSI</p>
+                <h4 class="text-2xl font-bold mb-4 text-white glow-text relative z-10">Masuk Dunia Web & AI</h4>
+                <p class="text-gray-300 text-sm leading-relaxed font-medium relative z-10">
+                  Mengembangkan kemampuan ke web development fullstack dan AI integration.
+                </p>
+              </div>
+            </div>
+            <div
+              class="absolute left-[14px] md:left-1/2 w-4 h-4 bg-white rounded-full border-4 border-[#050505] box-content transform md:-translate-x-1/2 shadow-[0_0_20px_#fff] transition-all duration-300 group-hover:scale-150">
+            </div>
+            <div class="hidden md:block w-5/12"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-32">
+        <h2 class="text-3xl font-bold mb-12 flex items-center gap-4 glow-text">
+          Layanan Sistem
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        </div>
+         <!-- tambahan -->
+          <div class="flex flex-col md:flex-row items-center justify-between relative group">
+            <div class="w-full md:w-7/12 ml-12 md:ml-0 md:text-right pr-0 md:pr-12">
+              <div
+                class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-8 glow-border transition-all duration-300 relative overflow-hidden group-hover:-translate-y-2 group-hover:border-white/40 group-hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                <div class="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-50"></div>
+                <p class="text-xs text-gray-400 font-bold tracking-[0.2em] mb-3 relative z-10">2024 — EKSPANSI</p>
+                <h4 class="text-2xl font-bold mb-4 text-white glow-text relative z-10">Masuk Dunia Web & AI</h4>
+                <p class="text-gray-300 text-sm leading-relaxed font-medium relative z-10">
+                  Mengembangkan kemampuan ke web development fullstack dan AI integration.
+                </p>
+              </div>
+            </div>
+            <!-- <div
+              class="absolute left-[14px] md:left-1/2 w-4 h-4 bg-white rounded-full border-4 border-[#050505] box-content transform md:-translate-x-1/2 shadow-[0_0_20px_#fff] transition-all duration-300 group-hover:scale-150">
+            </div> -->
+            <div class="hidden md:block w-5/12"></div>
+          </div>
+          <!-- end tambahan -->
+      </section>
+
+      <section class="mb-32">
+        <h2 class="text-3xl font-bold mb-12 flex items-center gap-4 glow-text">
+          Arsip Eksklusif
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        </div>
+      </section>
+
+      <section class="mb-20">
+        <h2 class="text-3xl font-bold mb-12 flex items-center gap-4 glow-text">
+          Hubungi Saya
+          <div class="flex-grow h-px bg-gradient-to-r from-gray-700 to-transparent"></div>
+        </h2>
+        <div class="flex flex-col md:flex-row gap-10">
+          <div class="w-full md:w-1/2">
+            <h3 class="text-3xl font-bold mb-5 glow-text">Mari Berkolaborasi</h3>
+            <p class="text-gray-400 mb-10 leading-relaxed pr-0 md:pr-8 text-lg">
+              Punya proyek menarik? Butuh bot, web app, atau sistem otomasi? Saya siap membantu mewujudkan ide kamu
+              menjadi kenyataan digital.
+            </p>
+            <div
+              class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-6 flex items-center gap-5 max-w-sm glow-border hover-float cursor-pointer">
+              <div
+                class="w-14 h-14 bg-gray-900 border border-gray-700 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                <i data-lucide="smartphone" class="text-white w-6 h-6"></i>
+              </div>
+              <div>
+                <p class="font-bold text-white text-lg tracking-wide">WhatsApp</p>
+                <p class="text-sm text-gray-500 font-medium mt-1">+62 851-3702-7046</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2">
+            <div class="bg-[#0a0a0a] border border-gray-800 rounded-3xl p-10 glow-border">
+              <h3 class="text-2xl font-bold mb-8">Kirim Pesan</h3>
+              <form class="space-y-6" onsubmit="event.preventDefault()">
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 mb-3 tracking-[0.15em]">NAMA KAMU</label>
+                  <input type="text" placeholder="Masukkan nama kamu..."
+                    class="w-full bg-[#111] border border-gray-800 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-gray-500 mb-3 tracking-[0.15em]">PESAN</label>
+                  <textarea placeholder="Ceritakan proyekmu..." rows="5"
+                    class="w-full bg-[#111] border border-gray-800 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition resize-none"></textarea>
+                </div>
+                <button
+                  class="hover-float w-full py-4 bg-gradient-to-r from-gray-200 to-white text-black font-black tracking-wide rounded-xl mt-4 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                  Kirim via WhatsApp
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="border-t border-gray-900 bg-[#050505] py-16 text-center">
+      <p class="text-gray-400 mb-3 font-medium text-lg">Dibuat dengan hati oleh <span
+          class="text-white font-bold glow-text">Dimas</span></p>
+      <p class="text-gray-600 text-sm font-medium tracking-wide">© 2025 Dimas — All Rights Reserved</p>
+    </footer>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    const skills = [
+      { title: 'Python', desc: 'Backend & Analitik Data' },
+      { title: 'JavaScript', desc: 'Frontend & Node.js' },
+      { title: 'WA Bot Engine', desc: 'CS Otomatis & Integrasi API' },
+      { title: 'Telegram Bot', desc: 'Scraping & Auto Moderasi' },
+      { title: 'AI Development', desc: 'Machine Learning & LLMs' },
+      { title: 'App Architecture', desc: 'Solusi Web & Mobile' },
+      { title: 'PocketMine-MP', desc: 'Dev Plugin Server Core' },
+      { title: 'MC Bedrock', desc: 'Resource Pack UI/UX' }
+    ];
+    const skillsGrid = document.getElementById('skills-grid');
+    skills.forEach(skill => {
+      const div = document.createElement('div');
+      div.className = "bg-[#111] border border-gray-800/80 rounded-2xl p-6 hover-float group cursor-pointer";
+      div.innerHTML = `<h4 class="font-bold text-gray-200 mb-2 text-lg group-hover:glow-text transition">${skill.title}</h4><p class="text-sm text-gray-500 font-medium">${skill.desc}</p>`;
+      skillsGrid.appendChild(div);
+    });
+
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'id', autoDisplay: false, includedLanguages: 'id,en,ja,ko,ar' }, 'google_translate_element');
+    }
+    const gtScript = document.createElement('script');
+    gtScript.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    document.body.appendChild(gtScript);
+
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+    langToggle.addEventListener('click', () => { langDropdown.classList.toggle('hidden'); });
+
+    window.changeLanguage = function (langCode, langName) {
+      document.getElementById('current-lang').innerText = langName;
+      langDropdown.classList.add('hidden');
+      const appContent = document.getElementById('app-content');
+      appContent.classList.add('blur-effect');
+      const selectElement = document.querySelector('.goog-te-combo');
+      if (selectElement) {
+        selectElement.value = langCode;
+        selectElement.dispatchEvent(new Event('change'));
+      } else {
+        document.cookie = "googtrans=/id/" + langCode + "; domain=" + window.location.hostname + "; path=/";
+        location.reload();
+      }
+      setTimeout(() => { appContent.classList.remove('blur-effect'); }, 600);
+    };
+
+    const splashLinkFull = '';
+    const splashLinkEl = document.getElementById('splash-link');
+    let splashLinkIdx = 0;
+    const typeSplashLink = setInterval(() => {
+      splashLinkEl.innerText = splashLinkFull.slice(0, splashLinkIdx);
+      splashLinkIdx++;
+      if (splashLinkIdx > splashLinkFull.length) clearInterval(typeSplashLink);
+    }, 80);
+
+    const heroTextFull = 'Dimas Aldi Saputra';
+    const heroTextEl = document.getElementById('typed-text');
+    let isDeleting = false;
+    let heroTextTxt = '';
+
+    function typeHeroText() {
+      const typeSpeed = isDeleting ? 50 : 150;
+      if (isDeleting) { heroTextTxt = heroTextFull.substring(0, heroTextTxt.length - 1); } else { heroTextTxt = heroTextFull.substring(0, heroTextTxt.length + 1); }
+      heroTextEl.innerText = heroTextTxt;
+      let delta = typeSpeed;
+      if (!isDeleting && heroTextTxt === heroTextFull) { delta = 2500; isDeleting = true; } else if (isDeleting && heroTextTxt === '') { isDeleting = false; delta = 500; }
+      setTimeout(typeHeroText, delta);
+    }
+
+    function init3D() {
+      const ctn = document.getElementById("canvas-container");
+      if (!ctn) return;
+      const scn = new THREE.Scene();
+      const cam = new THREE.PerspectiveCamera(45, ctn.clientWidth / ctn.clientHeight, 0.1, 1000);
+      cam.position.set(0, 4, 11);
+      const rnd = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      rnd.setSize(ctn.clientWidth, ctn.clientHeight);
+      rnd.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      ctn.appendChild(rnd.domElement);
+      const ctrl = new THREE.OrbitControls(cam, rnd.domElement);
+      ctrl.enableZoom = false; ctrl.enablePan = false;
+      const amb = new THREE.AmbientLight(0xffffff, 0.1);
+      scn.add(amb);
+      const lgt = new THREE.PointLight(0xffcc66, 4, 100);
+      scn.add(lgt);
+      const sunGeo = new THREE.SphereGeometry(1.2, 64, 64);
+      const sunMat = new THREE.MeshBasicMaterial({ color: 0xfff5e6 });
+      const s = new THREE.Mesh(sunGeo, sunMat);
+      scn.add(s);
+      const glowGeo1 = new THREE.SphereGeometry(1.35, 64, 64);
+      const glowMat1 = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending });
+      const glow1 = new THREE.Mesh(glowGeo1, glowMat1);
+      scn.add(glow1);
+      const glowGeo2 = new THREE.SphereGeometry(1.8, 64, 64);
+      const glowMat2 = new THREE.MeshBasicMaterial({ color: 0xff4400, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending });
+      const glow2 = new THREE.Mesh(glowGeo2, glowMat2);
+      scn.add(glow2);
+      const glowGeo3 = new THREE.SphereGeometry(2.5, 64, 64);
+      const glowMat3 = new THREE.MeshBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0.05, blending: THREE.AdditiveBlending });
+      const glow3 = new THREE.Mesh(glowGeo3, glowMat3);
+      scn.add(glow3);
+      const arr = [];
+      function mk(sz, cl, ds, sp) {
+        const m = new THREE.Mesh(new THREE.SphereGeometry(sz, 32, 32), new THREE.MeshStandardMaterial({ color: cl, roughness: 0.7, metalness: 0.3 }));
+        scn.add(m);
+        const r = new THREE.RingGeometry(ds - 0.012, ds + 0.012, 128);
+        const rm = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.07, side: THREE.DoubleSide });
+        const rr = new THREE.Mesh(r, rm);
+        rr.rotation.x = Math.PI / 2;
+        scn.add(rr);
+        arr.push({ m, ds, sp, a: Math.random() * Math.PI * 2 });
+      }
+      mk(0.06, 0xaaaaaa, 2.2, 0.018); mk(0.1, 0xe2bf7d, 3.2, 0.014); mk(0.13, 0x38bdf8, 4.3, 0.009); mk(0.09, 0xef4444, 5.4, 0.007); mk(0.32, 0xd39c7e, 6.8, 0.004); mk(0.27, 0xf6e5c0, 8.3, 0.0025); mk(0.22, 0x7ed6df, 9.8, 0.0018); mk(0.22, 0x4834d4, 11.3, 0.0008);
+      const g = new THREE.BufferGeometry();
+      const n = 2500;
+      const p = new Float32Array(n * 3);
+      for (let i = 0; i < p.length; i++) { p[i] = (Math.random() - 0.5) * 65; }
+      g.setAttribute("position", new THREE.BufferAttribute(p, 3));
+      const st = new THREE.Points(g, new THREE.PointsMaterial({ size: 0.035, color: 0xffffff, transparent: true, opacity: 0.45 }));
+      scn.add(st);
+      function animate() {
+        requestAnimationFrame(animate);
+        s.rotation.y += 0.0015;
+        const t = Date.now() * 0.0015;
+        glow1.scale.setScalar(1 + Math.sin(t) * 0.03);
+        glow2.scale.setScalar(1 + Math.sin(t * 0.7) * 0.05);
+        glow3.scale.setScalar(1 + Math.cos(t * 0.5) * 0.1);
+        arr.forEach(x => { x.a += x.sp; x.m.position.x = Math.cos(x.a) * x.ds; x.m.position.z = Math.sin(x.a) * x.ds; x.m.rotation.y += 0.015; });
+        st.rotation.y += 0.00025;
+        ctrl.update(); rnd.render(scn, cam);
+      }
+      animate();
+      window.addEventListener("resize", () => { if (!ctn) return; cam.aspect = ctn.clientWidth / ctn.clientHeight; cam.updateProjectionMatrix(); rnd.setSize(ctn.clientWidth, ctn.clientHeight); });
+    }
+
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      const mainContent = document.getElementById('app-content');
+      splash.style.opacity = '0';
+      setTimeout(() => { splash.style.display = 'none'; mainContent.classList.remove('hidden'); setTimeout(typeHeroText, 500); init3D(); }, 500);
+    }, 2800);
+  </script>
+</body>
+
+</html>

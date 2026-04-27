@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project - Portfolio</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-slate-950 text-white font-sans relative overflow-x-hidden scroll-smooth">
+
+<!-- BACKGROUND -->
+<div id="terminal-bg"></div>
+
+<div class="min-h-screen px-6 py-16 relative z-10">
+
+  <!-- TITLE -->
+  <div class="text-center mb-12">
+    <h1 class="text-3xl md:text-4xl font-bold text-green-400">$ ./project.Qu</h1>
+    <p class="text-slate-400 mt-2">Beberapa project yang pernah saya kerjakan</p>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+
+    <!-- PROJECT 1 -->
+<a href="https://pameran-jti.polije.ac.id/x23241_ng/product/130/techtopia" target="_blank"
+  class="project-card block">
+  <img src="techto.png" class="project-img rounded-xl">
+  <h2 class="text-green-400 mt-4 font-bold">Techtopia</h2>
+  <p class="text-sm text-slate-400">Semester 1</p>
+</a>
+
+<!-- PROJECT 2 -->
+<a href="https://pameran-jti.polije.ac.id/product/230/washpro" target="_blank"
+  class="project-card block">
+  <img src="washpro.png" class="project-img rounded-xl">
+  <h2 class="text-green-400 mt-4 font-bold">WashPro</h2>
+  <p class="text-sm text-slate-400">Semester 2</p>
+</a>
+
+<!-- PROJECT 3 -->
+<a href="https://pameran-jti.polije.ac.id/product/418/simpelsi-sistem-pelaporan-sampah-ilegal" target="_blank"
+  class="project-card block">
+  <img src="simpelsi.png" class="project-img rounded-xl">
+  <h2 class="text-green-400 mt-4 font-bold">Simpelsi</h2>
+  <p class="text-sm text-slate-400">Semester 3</p>
+</a>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div id="modal" onclick="closeModal()" class="hidden fixed inset-0 bg-black/70 backdrop-blur flex items-center justify-center z-50">
+
+  <div onclick="event.stopPropagation()" class="bg-slate-900 p-6 rounded-xl max-w-md w-full relative">
+
+    <img id="modalImg" class="rounded-xl mb-4 w-full">
+
+    <h2 id="modalTitle" class="text-xl font-bold text-green-400"></h2>
+    <p id="modalDesc" class="text-slate-300 mt-2"></p>
+
+    <div class="mt-6 flex gap-3">
+      <a id="demoBtn" href="#" target="_blank" class="btn">Demo</a>
+      <a href="https://github.com/dimasaldi2005" target="_blank" class="btn-outline">Github</a>
+    </div>
+
+    <button onclick="closeModal()" class="absolute top-3 right-3 text-xl">✕</button>
+
+  </div>
+
+</div>
+
+<!-- DOCK -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4 px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg z-40">
+
+  <div onclick="navigateTo('index.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="home" class="text-blue-400"></i>
+    <span class="tooltip-hover">Home</span>
+  </div>
+
+  <div onclick="navigateTo('about.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="user" class="text-green-400"></i>
+    <span class="tooltip-hover">Profil</span>
+  </div>
+
+  <div onclick="navigateTo('sertifikat.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="award" class="text-yellow-400"></i>
+    <span class="tooltip-hover">Sertifikat</span>
+  </div>
+
+  <div onclick="navigateTo('contact.html')" class="dock-item group relative cursor-pointer">
+    <i data-lucide="mail" class="text-red-400"></i>
+    <span class="tooltip-hover">Kontak</span>
+  </div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+window.onload = () => {
+  lucide.createIcons();
+};
+
+/* MODAL */
+function openModal(title, desc, img, link) {
+  document.getElementById("modal").classList.remove("hidden");
+  document.getElementById("modalTitle").innerText = title;
+  document.getElementById("modalDesc").innerText = desc;
+  document.getElementById("modalImg").src = img;
+
+  const btn = document.getElementById("demoBtn");
+
+  if (!link || link === '#') {
+    btn.style.display = "none";
+  } else {
+    btn.style.display = "inline-block";
+    btn.href = link;
+  }
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.add("hidden");
+}
+
+/* NAVIGASI */
+function navigateTo(page) {
+  window.location.href = page;
+}
+</script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
